@@ -27,3 +27,6 @@ local.properties
 
 # Generated files
 build
+.gradle
+buildSrc/build
+buildSrc/.gradle
