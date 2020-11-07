@@ -24,3 +24,6 @@ hs_err_pid*
 
 # Local config
 local.properties
+
+# Generated files
+build
