@@ -15,8 +15,9 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test-junit"))
     implementation(compose.desktop.all)
+
+    testImplementation(kotlin("test-junit"))
 }
 
 tasks {
