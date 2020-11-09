@@ -1,6 +1,6 @@
 package dev.vdbroek.pepijn98.ui
 
-import androidx.compose.material.MaterialTheme
+import androidx.compose.desktop.DesktopMaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.*
@@ -25,7 +25,7 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
-    MaterialTheme(
+    DesktopMaterialTheme (
         colors = if (ThemeState.isDark) DarkColorPalette else LightColorPalette,
         typography = typography,
         shapes = shapes,

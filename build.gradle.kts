@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "dev.vdbroek"
-version = "1.0.0"
+version = Versions.app
 
 repositories {
     jcenter()
@@ -16,6 +16,11 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.all)
+    implementation(compose.foundation)
+    implementation(compose.material)
+    implementation(compose.runtime)
+    implementation(compose.ui)
+    implementation(compose.materialIconsExtended)
 
     testImplementation(kotlin("test-junit"))
 }
@@ -37,10 +42,14 @@ tasks {
 compose.desktop {
     application {
         mainClass = "$group.${rootProject.name.toLowerCase()}.MainKt"
+        javaHome = System.getenv("JDK_15") // Path to Amazon Corretto 15
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = rootProject.name
+            version = Versions.app
+            description = "Compose for Desktop Example App"
+            vendor = "Pepijn van den Broek"
         }
     }
 }

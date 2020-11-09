@@ -1,23 +1,43 @@
 package dev.vdbroek.pepijn98
 
+import androidx.compose.desktop.AppManager
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Bedtime
+import androidx.compose.material.icons.rounded.WbSunny
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.imageFromResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.MenuItem
+import androidx.compose.ui.window.Tray
 import dev.vdbroek.pepijn98.ui.AppTheme
 import dev.vdbroek.pepijn98.ui.ThemeState
+import java.awt.image.BufferedImage
+import java.io.File
+import javax.imageio.ImageIO
 
 fun main() = Window(
     title = "Pepijn98",
-    size = IntSize(700, 450)
+    size = IntSize(700, 450),
+    icon = getWindowIcon()
 ) {
     var count by remember { mutableStateOf(0) }
+    val appIcon = remember { getWindowIcon() }
+
+    onActive {
+        val tray = SystemTray(appIcon)
+
+        onDispose {
+            tray.remove()
+        }
+    }
+
+    AppManager.focusedWindow?.setIcon(appIcon)
 
     AppTheme {
         Box(
@@ -45,10 +65,40 @@ fun main() = Window(
             ) {
                 Icon(
                     modifier = Modifier.padding(10.dp),
-                    asset = if (ThemeState.isDark) imageFromResource("drawable/light.png") else imageFromResource("drawable/dark.png"),
+                    asset = if (ThemeState.isDark) Icons.Rounded.Bedtime else Icons.Rounded.WbSunny,
                     tint = MaterialTheme.colors.onBackground
                 )
             }
         }
     }
+}
+
+fun SystemTray(appIcon: BufferedImage): Tray {
+    return Tray().apply {
+        icon(appIcon)
+        menu(
+            MenuItem(
+                name = "Quit",
+                onClick = {
+                    AppManager.exit()
+                }
+            )
+        )
+    }
+}
+
+fun getWindowIcon(): BufferedImage {
+    var image: BufferedImage? = null
+    try {
+        val file = File("assets/appicon/icon.png")
+        image = ImageIO.read(file)
+    } catch (e: Exception) {
+        // image file does not exist
+    }
+
+    if (image == null) {
+        image = BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)
+    }
+
+    return image
 }
