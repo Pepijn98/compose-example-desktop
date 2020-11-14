@@ -13,10 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.MenuItem
-import androidx.compose.ui.window.Tray
 import dev.vdbroek.pepijn98.ui.AppTheme
 import dev.vdbroek.pepijn98.ui.ThemeState
+import dev.vdbroek.pepijn98.ui.utils.Popup
+import dev.vdbroek.pepijn98.utils.addMany
+import dorkbox.systemTray.MenuItem
+import dorkbox.systemTray.SystemTray
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
@@ -33,7 +35,7 @@ fun main() = Window(
         val tray = SystemTray(appIcon)
 
         onDispose {
-            tray.remove()
+            tray.shutdown()
         }
     }
 
@@ -70,19 +72,24 @@ fun main() = Window(
                 )
             }
         }
+
+        if (Popup.State.success) {
+            Popup.Success("This is just a test")
+        }
     }
 }
 
-fun SystemTray(appIcon: BufferedImage): Tray {
-    return Tray().apply {
-        icon(appIcon)
-        menu(
-            MenuItem(
-                name = "Quit",
-                onClick = {
-                    AppManager.exit()
-                }
-            )
+fun SystemTray(appIcon: BufferedImage): SystemTray {
+    return SystemTray.get().apply {
+        setImage(appIcon)
+        status = "Pepijn98"
+        menu.addMany(
+            MenuItem("Testing") {
+                Popup.State.enable(Popup.Type.SUCCESS)
+            },
+            MenuItem("Quit") {
+                AppManager.exit()
+            }
         )
     }
 }

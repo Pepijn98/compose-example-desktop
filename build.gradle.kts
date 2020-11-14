@@ -11,16 +11,21 @@ version = Versions.app
 
 repositories {
     jcenter()
+    mavenCentral()
+    maven(url = "https://jitpack.io")
     maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
 
 dependencies {
     implementation(compose.desktop.all)
-    implementation(compose.foundation)
-    implementation(compose.material)
-    implementation(compose.runtime)
-    implementation(compose.ui)
     implementation(compose.materialIconsExtended)
+
+    implementation(Deps.systemTray)
+
+    // Neither of these nor the build in compose notifier work on my linux environment
+    // I don't know if it's because of compose or if they just don't support it or maybe I configured something badly
+    implementation("com.github.PlusHaze:TrayNotification:5393c3a54f")
+    implementation("org.controlsfx:controlsfx:11.0.3")
 
     testImplementation(kotlin("test-junit"))
 }
@@ -50,6 +55,21 @@ compose.desktop {
             version = Versions.app
             description = "Compose for Desktop Example App"
             vendor = "Pepijn van den Broek"
+
+            val iconsRoot = project.file("./assets/appicon")
+            macOS {
+                iconFile.set(iconsRoot.resolve("icon.icns"))
+            }
+
+            windows {
+                iconFile.set(iconsRoot.resolve("icon.ico"))
+                menuGroup = "Pepijn98"
+                upgradeUuid = "d5d747e9-2ff0-4b46-b295-fb9390008309"
+            }
+
+            linux {
+                iconFile.set(iconsRoot.resolve("icon.png"))
+            }
         }
     }
 }
