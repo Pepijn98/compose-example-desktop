@@ -58,6 +58,8 @@ class Dialog {
             )
         }
 
+        dialog.window.isResizable = false
+
         onActive {
             dialog.show {
                 AppTheme {
