@@ -22,6 +22,10 @@ dependencies {
 
     implementation(Deps.systemTray)
 
+    implementation(Deps.Logging.slf4j)
+    implementation(Deps.Logging.Logback.core)
+    implementation(Deps.Logging.Logback.classic)
+
     // Neither of these nor the build in compose notifier work on my linux environment
     // I don't know if it's because of compose or if they just don't support it or maybe I configured something badly
     implementation("com.github.PlusHaze:TrayNotification:5393c3a54f")
