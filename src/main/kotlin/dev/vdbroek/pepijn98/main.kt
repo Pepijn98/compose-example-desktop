@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import dev.vdbroek.pepijn98.ui.AppColors
 import dev.vdbroek.pepijn98.ui.AppTheme
 import dev.vdbroek.pepijn98.ui.ThemeState
 import dev.vdbroek.pepijn98.ui.utils.Dialog
@@ -23,7 +24,6 @@ import dorkbox.systemTray.MenuItem
 import dorkbox.systemTray.SystemTray
 import java.awt.image.BufferedImage
 import java.io.File
-import java.util.*
 import javax.imageio.ImageIO
 
 fun main() = Window(
@@ -83,7 +83,20 @@ fun main() = Window(
                 icon = Icons.Rounded.Info,
                 title = "Test",
                 message = "This is just a test",
-                buttons = EnumSet.of(Dialog.Button.OK, Dialog.Button.CLOSE)
+                buttons = Pair(
+                    Dialog.Button(
+                        type = Dialog.ButtonType.CLOSE,
+                        action = {
+                            dialog.close()
+                        }
+                    ),
+                    Dialog.Button(
+                        type = Dialog.ButtonType.CONFIRM,
+                        action = {
+                            dialog.close()
+                        }
+                    )
+                )
             )
         }
 

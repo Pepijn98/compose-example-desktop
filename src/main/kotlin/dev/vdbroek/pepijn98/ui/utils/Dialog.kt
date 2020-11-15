@@ -16,10 +16,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.MenuBar
-import dev.vdbroek.pepijn98.ui.AppColors
 import dev.vdbroek.pepijn98.ui.AppTheme
 import java.awt.image.BufferedImage
-import java.util.*
 
 @Suppress("MemberVisibilityCanBePrivate")
 class Dialog {
@@ -30,7 +28,8 @@ class Dialog {
         icon: VectorAsset,
         title: String,
         message: String,
-        buttons: EnumSet<Button>,
+        buttons: Pair<Button, Button>,
+        iconTint: Color = MaterialTheme.colors.onBackground,
         size: IntSize = IntSize(400, 150),
         location: IntOffset = IntOffset.Zero,
         centered: Boolean = true,
@@ -38,10 +37,6 @@ class Dialog {
         menuBar: MenuBar? = null,
         undecorated: Boolean = false,
         events: WindowEvents = WindowEvents(),
-        onOkClick: () -> Unit = { close() },
-        onConfirmClick: () -> Unit = { close() },
-        onCloseClick: () -> Unit = { close() },
-        onQuitClick: () -> Unit = { close() },
         onDismissEvent: (() -> Unit) = { close() },
     ) {
         val dialog = remember {
@@ -63,66 +58,45 @@ class Dialog {
         onActive {
             dialog.show {
                 AppTheme {
-                    Row(
-                        modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background),
+                    Box(
+                        modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background)
                     ) {
-                        Box(
-                            modifier = Modifier.align(Alignment.Top).padding(10.dp)
+                        Row(
+                            modifier = Modifier.fillMaxSize().padding(10.dp),
                         ) {
-                            Icon(
-                                asset = icon.copy(defaultHeight = 80.dp, defaultWidth = 80.dp),
-                                tint = MaterialTheme.colors.onBackground
-                            )
-                        }
-                        Box(
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(top = 10.dp).fillMaxSize(),
-                                verticalArrangement = Arrangement.Top
+                            Box(
+                                modifier = Modifier.wrapContentSize().align(Alignment.Top).padding(end = 10.dp)
                             ) {
-                                Text(
-                                    modifier = Modifier.padding(bottom = 5.dp),
-                                    text = title,
-                                    color = MaterialTheme.colors.onBackground,
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    text = message,
-                                    color = MaterialTheme.colors.onBackground
+                                Icon(
+                                    asset = icon.copy(defaultHeight = 80.dp, defaultWidth = 80.dp),
+                                    tint = iconTint
                                 )
                             }
-                            Row(
-                                modifier = Modifier.wrapContentSize().padding(bottom = 5.dp).align(Alignment.BottomEnd)
-                            ) ButtonRow@{
-                                for (button in buttons) {
-                                    val modifier = Modifier.padding(end = 5.dp)
-                                    when (button) {
-                                        Button.OK -> Button(onOkClick, modifier) { Text("Ok") }
-                                        Button.CONFIRM -> Button(onConfirmClick, modifier) { Text("Confirm") }
-                                        Button.CLOSE -> Button(
-                                            onCloseClick,
-                                            modifier,
-                                            colors = ButtonConstants.defaultButtonColors(
-                                                backgroundColor = AppColors.danger,
-                                                contentColor = Color.White
-                                            )
-                                        ) {
-                                            Text("Close")
-                                        }
-                                        Button.QUIT -> Button(
-                                            onQuitClick,
-                                            modifier,
-                                            colors = ButtonConstants.defaultButtonColors(
-                                                backgroundColor = AppColors.danger,
-                                                contentColor = Color.White
-                                            )
-                                        ) {
-                                            Text("Quit")
-                                        }
-                                        else -> return@ButtonRow
-                                    }
+                            Box(
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalArrangement = Arrangement.Top
+                                ) {
+                                    Text(
+                                        modifier = Modifier.padding(bottom = 5.dp),
+                                        text = title,
+                                        color = MaterialTheme.colors.onBackground,
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = message,
+                                        color = MaterialTheme.colors.onBackground
+                                    )
+                                }
+                                Row(
+                                    modifier = Modifier.wrapContentSize().align(Alignment.BottomEnd)
+                                ) {
+                                    val (btnLeft, btnRight) = buttons
+                                    DialogButton(btnLeft.type, btnLeft.action)
+                                    DialogButton(btnRight.type, btnRight.action, true)
                                 }
                             }
                         }
@@ -138,6 +112,25 @@ class Dialog {
         }
     }
 
+    @Composable
+    fun DialogButton(type: ButtonType, onClick: () -> Unit, last: Boolean = false) {
+        val modifier = if (last) Modifier.padding(end = 0.dp) else Modifier.padding(end = 10.dp)
+        when (type) {
+            ButtonType.OK -> Button(onClick, modifier) {
+                Text("Ok")
+            }
+            ButtonType.CONFIRM -> Button(onClick, modifier) {
+                Text("Confirm")
+            }
+            ButtonType.CLOSE -> TextButton(onClick, modifier) {
+                Text("Close", color = MaterialTheme.colors.onBackground)
+            }
+            ButtonType.QUIT -> TextButton(onClick, modifier) {
+                Text("Quit", color = MaterialTheme.colors.onBackground)
+            }
+        }
+    }
+
     fun open() {
         isOpen = true
     }
@@ -146,7 +139,12 @@ class Dialog {
         isOpen = false
     }
 
-    enum class Button {
+    data class Button(
+        val type: ButtonType,
+        val action: () -> Unit
+    )
+
+    enum class ButtonType {
         OK,
         CONFIRM,
         CLOSE,
