@@ -82,7 +82,7 @@ object Popup {
             }
             Type.ERROR -> {
                 icon = Icons.Rounded.Error
-                background = AppColors.error
+                background = AppColors.danger
             }
         }
 

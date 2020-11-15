@@ -4,13 +4,11 @@ import androidx.compose.desktop.AppWindow
 import androidx.compose.desktop.WindowEvents
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.VectorAsset
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
@@ -18,6 +16,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.MenuBar
+import dev.vdbroek.pepijn98.ui.AppColors
 import dev.vdbroek.pepijn98.ui.AppTheme
 import java.awt.image.BufferedImage
 import java.util.*
@@ -100,8 +99,26 @@ class Dialog {
                                     when (button) {
                                         Button.OK -> Button(onOkClick, modifier) { Text("Ok") }
                                         Button.CONFIRM -> Button(onConfirmClick, modifier) { Text("Confirm") }
-                                        Button.CLOSE -> Button(onCloseClick, modifier) { Text("Close") }
-                                        Button.QUIT -> Button(onQuitClick, modifier) { Text("Quit") }
+                                        Button.CLOSE -> Button(
+                                            onCloseClick,
+                                            modifier,
+                                            colors = ButtonConstants.defaultButtonColors(
+                                                backgroundColor = AppColors.danger,
+                                                contentColor = Color.White
+                                            )
+                                        ) {
+                                            Text("Close")
+                                        }
+                                        Button.QUIT -> Button(
+                                            onQuitClick,
+                                            modifier,
+                                            colors = ButtonConstants.defaultButtonColors(
+                                                backgroundColor = AppColors.danger,
+                                                contentColor = Color.White
+                                            )
+                                        ) {
+                                            Text("Quit")
+                                        }
                                         else -> return@ButtonRow
                                     }
                                 }
