@@ -12,7 +12,6 @@ import androidx.compose.material.icons.rounded.WbSunny
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.imageFromResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import dev.vdbroek.pepijn98.ui.AppTheme
