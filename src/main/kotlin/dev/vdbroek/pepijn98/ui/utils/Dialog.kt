@@ -19,12 +19,11 @@ import androidx.compose.ui.window.MenuBar
 import dev.vdbroek.pepijn98.ui.AppTheme
 import java.awt.image.BufferedImage
 
-@Suppress("MemberVisibilityCanBePrivate")
 class Dialog {
     var isOpen by mutableStateOf(false)
 
     @Composable
-    fun create(
+    fun build(
         icon: ImageVector,
         title: String,
         message: String,
@@ -131,7 +130,7 @@ class Dialog {
         }
     }
 
-    fun open() {
+    fun show() {
         isOpen = true
     }
 

@@ -11,8 +11,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,29 +36,11 @@ object Popup {
         ERROR
     }
 
-    object State {
+    private object State {
         var info by mutableStateOf(false)
         var success by mutableStateOf(false)
         var warning by mutableStateOf(false)
         var error by mutableStateOf(false)
-
-        fun enable(type: Type) {
-            when (type) {
-                Type.INFO -> info = true
-                Type.SUCCESS -> success = true
-                Type.WARNING -> warning = true
-                Type.ERROR -> error = true
-            }
-        }
-
-        fun disable(type: Type) {
-            when (type) {
-                Type.INFO -> info = false
-                Type.SUCCESS -> success = false
-                Type.WARNING -> warning = false
-                Type.ERROR -> error = false
-            }
-        }
     }
 
     @Composable
@@ -112,7 +94,7 @@ object Popup {
                     IconButton(
                         modifier = Modifier.padding(start = 10.dp).size(15.dp).clip(RoundedCornerShape(percent = 50)).clipToBounds(),
                         onClick = {
-                            State.disable(type)
+                            close(type)
                         }
                     ) {
                         Icon(
@@ -143,5 +125,32 @@ object Popup {
     @Composable
     fun Error(text: String) {
         Default(text, Type.ERROR)
+    }
+
+    fun isOpen(type: Type): Boolean {
+        return when (type) {
+            Type.INFO -> State.info
+            Type.SUCCESS -> State.success
+            Type.WARNING -> State.warning
+            Type.ERROR -> State.error
+        }
+    }
+
+    fun show(type: Type) {
+        when (type) {
+            Type.INFO -> State.info = true
+            Type.SUCCESS -> State.success = true
+            Type.WARNING -> State.warning = true
+            Type.ERROR -> State.error = true
+        }
+    }
+
+    fun close(type: Type) {
+        when (type) {
+            Type.INFO -> State.info = false
+            Type.SUCCESS -> State.success = false
+            Type.WARNING -> State.warning = false
+            Type.ERROR -> State.error = false
+        }
     }
 }

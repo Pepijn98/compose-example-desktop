@@ -58,6 +58,7 @@ compose.desktop {
             packageName = rootProject.name
             version = Versions.app
             description = "Compose for Desktop Example App"
+            copyright = "© 2020 Pepijn van den Broek. All rights reserved."
             vendor = "Pepijn van den Broek"
 
             val iconsRoot = project.file("./assets/appicon")

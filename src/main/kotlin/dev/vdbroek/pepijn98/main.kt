@@ -25,6 +25,8 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
+lateinit var dialog: Dialog
+
 fun main() = Window(
     title = "Pepijn98",
     size = IntSize(700, 450),
@@ -33,17 +35,9 @@ fun main() = Window(
     var count by remember { mutableStateOf(0) }
     val appIcon = remember { getWindowIcon() }
 
-    val dialog = Dialog()
-
-    onActive {
-        val tray = SystemTray(appIcon)
-
-        onDispose {
-            tray.shutdown()
-        }
-    }
-
     AppManager.focusedWindow?.setIcon(appIcon)
+
+    dialog = Dialog()
 
     AppTheme {
         Box(
@@ -51,7 +45,7 @@ fun main() = Window(
             alignment = Alignment.Center
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                Button(onClick = { count++; dialog.open() }) {
+                Button(onClick = { count++ }) {
                     Text(text = if (count == 0) "Click me!" else "Clicked ${count}!")
                 }
                 Button(
@@ -77,8 +71,12 @@ fun main() = Window(
             }
         }
 
+        if (Popup.isOpen(Popup.Type.SUCCESS)) {
+            Popup.Success("This is just a test")
+        }
+
         if (dialog.isOpen) {
-            dialog.create(
+            dialog.build(
                 icon = Icons.Rounded.Info,
                 title = "Test",
                 message = "This is just a test",
@@ -98,9 +96,13 @@ fun main() = Window(
                 )
             )
         }
+    }
 
-        if (Popup.State.success) {
-            Popup.Success("This is just a test")
+    onActive {
+        val tray = SystemTray(appIcon)
+
+        onDispose {
+            tray.shutdown()
         }
     }
 }
@@ -110,8 +112,11 @@ fun SystemTray(appIcon: BufferedImage): SystemTray {
         setImage(appIcon)
         status = "Pepijn98"
         menu.addMany(
-            MenuItem("Testing") {
-                Popup.State.enable(Popup.Type.SUCCESS)
+            MenuItem("Open Popup") {
+                Popup.show(Popup.Type.SUCCESS)
+            },
+            MenuItem("Open Dialog") {
+                dialog.show()
             },
             MenuItem("Quit") {
                 AppManager.exit()
@@ -124,8 +129,7 @@ fun getWindowIcon(): BufferedImage {
     var image: BufferedImage? = null
     try {
         val path = if (System.getenv("PEPIJN98_ENV") == "development") "assets/appicon/icon.png" else "/opt/pepijn98/lib/Pepijn98.png"
-        val file = File(path)
-        image = ImageIO.read(file)
+        image = ImageIO.read(File(path))
     } catch (e: Exception) {
         // image file does not exist
     }
