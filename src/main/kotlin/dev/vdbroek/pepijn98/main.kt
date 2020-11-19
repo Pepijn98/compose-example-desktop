@@ -139,7 +139,6 @@ fun getWindowIcon(): BufferedImage {
     var image: BufferedImage? = null
     try {
         val icon = ClassLoader.getSystemResource("images/icon.png")
-        imageFromResource("")
         image = ImageIO.read(icon.openStream())
     } catch (e: Exception) {
         // image file does not exist
