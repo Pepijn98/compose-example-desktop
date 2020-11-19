@@ -1,5 +1,6 @@
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import java.util.Properties
 
 plugins {
     kotlin("jvm") version Versions.kotlin
@@ -34,6 +35,16 @@ dependencies {
     testImplementation(kotlin("test-junit"))
 }
 
+val createProperties: Task by tasks.creating {
+    doLast {
+        File("$buildDir/resources/main/version.properties").bufferedWriter().use {
+            val p = Properties()
+            p.setProperty("version", Versions.app)
+            p.store(it, null)
+        }
+    }
+}
+
 tasks {
     compileKotlin {
         kotlinOptions.jvmTarget = Versions.jvmTarget
@@ -45,6 +56,10 @@ tasks {
 
     test {
         useJUnit()
+    }
+
+    build {
+        dependsOn(createProperties)
     }
 }
 

@@ -12,6 +12,7 @@ import androidx.compose.material.icons.rounded.WbSunny
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.imageFromResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import dev.vdbroek.pepijn98.ui.AppTheme
@@ -22,7 +23,7 @@ import dev.vdbroek.pepijn98.utils.addMany
 import dorkbox.systemTray.MenuItem
 import dorkbox.systemTray.SystemTray
 import java.awt.image.BufferedImage
-import java.io.File
+import java.util.*
 import javax.imageio.ImageIO
 
 lateinit var dialog: Dialog
@@ -38,6 +39,10 @@ fun main() = Window(
     AppManager.focusedWindow?.setIcon(appIcon)
 
     dialog = Dialog()
+
+    val resource = ClassLoader.getSystemResource("version.properties")
+    val properties = Properties()
+    properties.load(resource.openStream())
 
     AppTheme {
         Box(
@@ -69,6 +74,11 @@ fun main() = Window(
                     tint = MaterialTheme.colors.onBackground
                 )
             }
+            Text(
+                modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp),
+                text = "v${properties.getProperty("version")}",
+                color = MaterialTheme.colors.onBackground
+            )
         }
 
         if (Popup.isOpen(Popup.Type.SUCCESS)) {
@@ -128,8 +138,9 @@ fun SystemTray(appIcon: BufferedImage): SystemTray {
 fun getWindowIcon(): BufferedImage {
     var image: BufferedImage? = null
     try {
-        val path = if (System.getenv("PEPIJN98_ENV") == "development") "assets/appicon/icon.png" else "/opt/pepijn98/lib/Pepijn98.png"
-        image = ImageIO.read(File(path))
+        val icon = ClassLoader.getSystemResource("images/icon.png")
+        imageFromResource("")
+        image = ImageIO.read(icon.openStream())
     } catch (e: Exception) {
         // image file does not exist
     }
