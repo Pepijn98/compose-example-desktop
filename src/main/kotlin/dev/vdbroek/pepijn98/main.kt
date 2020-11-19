@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import dev.vdbroek.pepijn98.ui.AppColors
 import dev.vdbroek.pepijn98.ui.AppTheme
 import dev.vdbroek.pepijn98.ui.ThemeState
 import dev.vdbroek.pepijn98.ui.utils.Dialog
@@ -72,7 +71,7 @@ fun main() = Window(
             ) {
                 Icon(
                     modifier = Modifier.padding(10.dp),
-                    asset = if (ThemeState.isDark) Icons.Rounded.Bedtime else Icons.Rounded.WbSunny,
+                    imageVector = if (ThemeState.isDark) Icons.Rounded.Bedtime else Icons.Rounded.WbSunny,
                     tint = MaterialTheme.colors.onBackground
                 )
             }
@@ -124,7 +123,8 @@ fun SystemTray(appIcon: BufferedImage): SystemTray {
 fun getWindowIcon(): BufferedImage {
     var image: BufferedImage? = null
     try {
-        val file = File("assets/appicon/icon.png")
+        val path = if (System.getenv("PEPIJN98_ENV") == "development") "assets/appicon/icon.png" else "/opt/pepijn98/lib/Pepijn98.png"
+        val file = File(path)
         image = ImageIO.read(file)
     } catch (e: Exception) {
         // image file does not exist

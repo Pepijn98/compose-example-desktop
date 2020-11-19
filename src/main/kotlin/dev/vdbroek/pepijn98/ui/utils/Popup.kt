@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.VectorAsset
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
@@ -63,7 +63,7 @@ object Popup {
 
     @Composable
     private fun Default(text: String, type: Type) {
-        val icon: VectorAsset
+        val icon: ImageVector
         val background: Color
         val onBackground = if (type == Type.WARNING) AppColors.darkSurface else Color.White
 
@@ -102,7 +102,7 @@ object Popup {
                 ) {
                     Icon(
                         modifier = Modifier.padding(horizontal = 10.dp),
-                        asset = icon,
+                        imageVector = icon,
                         tint = onBackground
                     )
                     Text(
@@ -116,7 +116,7 @@ object Popup {
                         }
                     ) {
                         Icon(
-                            asset = Icons.Rounded.Close,
+                            imageVector = Icons.Rounded.Close,
                             tint = onBackground
                         )
                     }
