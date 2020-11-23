@@ -76,19 +76,24 @@ compose.desktop {
             copyright = "© 2020 Pepijn van den Broek. All rights reserved."
             vendor = "Pepijn van den Broek"
 
-            val iconsRoot = project.file("./assets/appicon")
+            val iconsRoot = project.file("./src/main/resources/images/icons")
             macOS {
                 iconFile.set(iconsRoot.resolve("icon.icns"))
+            }
+
+            linux {
+                iconFile.set(iconsRoot.resolve("icon.png"))
+                menuGroup = "Pepijn98"
+                shortcut = true
+                appCategory = "Utility"
+                debMaintainer = "Pepijn98"
             }
 
             windows {
                 iconFile.set(iconsRoot.resolve("icon.ico"))
                 menuGroup = "Pepijn98"
+                shortcut = true
                 upgradeUuid = "d5d747e9-2ff0-4b46-b295-fb9390008309"
-            }
-
-            linux {
-                iconFile.set(iconsRoot.resolve("icon.png"))
             }
         }
     }

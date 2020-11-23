@@ -21,9 +21,12 @@ import dev.vdbroek.pepijn98.ui.utils.Popup
 import dev.vdbroek.pepijn98.utils.addMany
 import dorkbox.systemTray.MenuItem
 import dorkbox.systemTray.SystemTray
+import dorkbox.util.OS
+import dorkbox.util.OSUtil
 import java.awt.image.BufferedImage
 import java.util.*
 import javax.imageio.ImageIO
+
 
 lateinit var dialog: Dialog
 
@@ -117,6 +120,13 @@ fun main() = Window(
 }
 
 fun SystemTray(appIcon: BufferedImage): SystemTray {
+    // Force AppIndicator when OS is PopOS and GNOME os >= 3.26
+    // It seems there were some issues with PopOS not setting GDMSESSION https://github.com/dorkbox/SystemTray/issues/125
+    val isPop = OS.isLinux() && OSUtil.Linux.getInfo("pop")
+    if (isPop && forceAppIndicator()) {
+        SystemTray.FORCE_TRAY_TYPE = SystemTray.TrayType.AppIndicator
+    }
+
     return SystemTray.get().apply {
         setImage(appIcon)
         status = "Pepijn98"
@@ -137,7 +147,7 @@ fun SystemTray(appIcon: BufferedImage): SystemTray {
 fun getWindowIcon(): BufferedImage {
     var image: BufferedImage? = null
     try {
-        val icon = ClassLoader.getSystemResource("images/icon.png")
+        val icon = ClassLoader.getSystemResource("images/icons/icon.png")
         image = ImageIO.read(icon.openStream())
     } catch (e: Exception) {
         // image file does not exist
@@ -148,4 +158,25 @@ fun getWindowIcon(): BufferedImage {
     }
 
     return image
+}
+
+fun forceAppIndicator(): Boolean {
+    val gnomeVersion = OSUtil.DesktopEnv.getGnomeVersion() ?: return false
+    val major: Int
+    val minorAndPatch: Double
+
+    val split = gnomeVersion.split(Regex("\\."), 2)
+
+    try {
+        major = split[0].toInt()
+        minorAndPatch = split[1].toDouble()
+    } catch (ignored: Exception) {
+        return false
+    }
+
+    return when (major) {
+        2 -> false
+        3 -> minorAndPatch >= 26.0
+        else -> false
+    }
 }

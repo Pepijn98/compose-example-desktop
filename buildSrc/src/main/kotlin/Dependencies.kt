@@ -2,7 +2,7 @@ import org.gradle.api.JavaVersion
 
 object Versions {
     val jvmTarget = JavaVersion.VERSION_1_8.toString()
-    const val app = "1.0.11"
+    const val app = "1.0.13"
 
     const val kotlin = "1.4.10"
     const val compose = "0.2.0-build124"
