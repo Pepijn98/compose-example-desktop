@@ -24,6 +24,7 @@ import dorkbox.systemTray.MenuItem
 import dorkbox.systemTray.SystemTray
 import dorkbox.util.OS
 import dorkbox.util.OSUtil
+import java.awt.Window
 import java.awt.image.BufferedImage
 import java.util.Properties
 import javax.imageio.ImageIO
@@ -134,7 +135,7 @@ fun SystemTray(appIcon: BufferedImage): SystemTray {
         status = "Pepijn98"
         menu.addMany(
             MenuItem("Open ${buildInfo.name}") {
-                for (window in java.awt.Window.getWindows()) {
+                for (window in Window.getWindows()) {
                     window.isVisible = true
                     window.requestFocus()
                     window.toFront()
