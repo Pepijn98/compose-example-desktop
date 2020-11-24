@@ -1,8 +1,6 @@
 package dev.vdbroek.pepijn98
 
 import androidx.compose.desktop.AppManager
-import androidx.compose.desktop.AppWindow
-import androidx.compose.desktop.AppWindowAmbient
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,8 +10,6 @@ import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.WbSunny
 import androidx.compose.runtime.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
@@ -35,15 +31,11 @@ import javax.imageio.ImageIO
 lateinit var dialog: Dialog
 lateinit var buildInfo: BuildInfo
 
-var windowState: AppWindow? by mutableStateOf(null)
-
 fun main() = Window(
     title = "Pepijn98",
     size = IntSize(700, 450),
     icon = getWindowIcon()
 ) {
-    windowState = AppWindowAmbient.current
-
     var count by remember { mutableStateOf(0) }
     val appIcon = remember { getWindowIcon() }
 
@@ -142,10 +134,10 @@ fun SystemTray(appIcon: BufferedImage): SystemTray {
         status = "Pepijn98"
         menu.addMany(
             MenuItem("Open ${buildInfo.name}") {
-                windowState?.window?.let {
-                    it.isVisible = true
-                    it.requestFocus()
-                    it.toFront()
+                for (window in java.awt.Window.getWindows()) {
+                    window.isVisible = true
+                    window.requestFocus()
+                    window.toFront()
                 }
             },
             MenuItem("Open Popup") {
