@@ -1,6 +1,8 @@
 package dev.vdbroek.pepijn98
 
 import androidx.compose.desktop.AppManager
+import androidx.compose.desktop.AppWindow
+import androidx.compose.desktop.AppWindowAmbient
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,6 +12,8 @@ import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.WbSunny
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
@@ -18,33 +22,39 @@ import dev.vdbroek.pepijn98.ui.AppTheme
 import dev.vdbroek.pepijn98.ui.ThemeState
 import dev.vdbroek.pepijn98.ui.utils.Dialog
 import dev.vdbroek.pepijn98.ui.utils.Popup
+import dev.vdbroek.pepijn98.utils.BuildInfo
 import dev.vdbroek.pepijn98.utils.addMany
 import dorkbox.systemTray.MenuItem
 import dorkbox.systemTray.SystemTray
 import dorkbox.util.OS
 import dorkbox.util.OSUtil
 import java.awt.image.BufferedImage
-import java.util.*
+import java.util.Properties
 import javax.imageio.ImageIO
 
-
 lateinit var dialog: Dialog
+lateinit var buildInfo: BuildInfo
+
+var windowState: AppWindow? by mutableStateOf(null)
 
 fun main() = Window(
     title = "Pepijn98",
     size = IntSize(700, 450),
     icon = getWindowIcon()
 ) {
+    windowState = AppWindowAmbient.current
+
     var count by remember { mutableStateOf(0) }
     val appIcon = remember { getWindowIcon() }
 
-    AppManager.focusedWindow?.setIcon(appIcon)
-
-    dialog = Dialog()
-
-    val resource = ClassLoader.getSystemResource("version.properties")
+    val resource = ClassLoader.getSystemResource("build-info.properties")
     val properties = Properties()
     properties.load(resource.openStream())
+
+    AppManager.focusedWindow?.setIcon(appIcon)
+
+    buildInfo = BuildInfo.from(properties)
+    dialog = Dialog()
 
     AppTheme {
         Box(
@@ -78,7 +88,7 @@ fun main() = Window(
             }
             Text(
                 modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp),
-                text = "v${properties.getProperty("version")}",
+                text = "v${buildInfo.version}",
                 color = MaterialTheme.colors.onBackground
             )
         }
@@ -131,6 +141,13 @@ fun SystemTray(appIcon: BufferedImage): SystemTray {
         setImage(appIcon)
         status = "Pepijn98"
         menu.addMany(
+            MenuItem("Open ${buildInfo.name}") {
+                windowState?.window?.let {
+                    it.isVisible = true
+                    it.requestFocus()
+                    it.toFront()
+                }
+            },
             MenuItem("Open Popup") {
                 Popup.show(Popup.Type.SUCCESS)
             },

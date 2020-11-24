@@ -7,8 +7,8 @@ plugins {
     id("org.jetbrains.compose") version Versions.compose
 }
 
-group = "dev.vdbroek"
-version = Versions.app
+group = BuildInfo.group
+version = BuildInfo.version
 
 repositories {
     jcenter()
@@ -37,9 +37,15 @@ dependencies {
 
 val createProperties: Task by tasks.creating {
     doLast {
-        File("$buildDir/resources/main/version.properties").bufferedWriter().use {
+        File("$buildDir/resources/main/build-info.properties").bufferedWriter().use {
             val p = Properties()
-            p.setProperty("version", Versions.app)
+            p.setProperty("name", BuildInfo.name)
+            p.setProperty("group", BuildInfo.group)
+            p.setProperty("version", BuildInfo.version)
+            p.setProperty("description", BuildInfo.description)
+            p.setProperty("copyright", BuildInfo.copyright)
+            p.setProperty("vendor", BuildInfo.vendor)
+            p.setProperty("mainClass", BuildInfo.mainClass)
             p.store(it, null)
         }
     }
@@ -65,16 +71,17 @@ tasks {
 
 compose.desktop {
     application {
-        mainClass = "$group.${rootProject.name.toLowerCase()}.MainKt"
+        mainClass = BuildInfo.mainClass
         javaHome = System.getenv("JDK_15") // Path to Amazon Corretto 15
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = rootProject.name
-            version = Versions.app
-            description = "Compose for Desktop Example App"
-            copyright = "© 2020 Pepijn van den Broek. All rights reserved."
-            vendor = "Pepijn van den Broek"
+
+            packageName = BuildInfo.name
+            version = BuildInfo.version
+            description = BuildInfo.description
+            copyright = BuildInfo.copyright
+            vendor = BuildInfo.vendor
 
             val iconsRoot = project.file("./src/main/resources/images/icons")
             macOS {
@@ -83,15 +90,17 @@ compose.desktop {
 
             linux {
                 iconFile.set(iconsRoot.resolve("icon.png"))
-                menuGroup = "Pepijn98"
+
+                menuGroup = BuildInfo.name
                 shortcut = true
                 appCategory = "Utility"
-                debMaintainer = "Pepijn98"
+                debMaintainer = BuildInfo.vendor
             }
 
             windows {
                 iconFile.set(iconsRoot.resolve("icon.ico"))
-                menuGroup = "Pepijn98"
+
+                menuGroup = BuildInfo.name
                 shortcut = true
                 upgradeUuid = "d5d747e9-2ff0-4b46-b295-fb9390008309"
             }
