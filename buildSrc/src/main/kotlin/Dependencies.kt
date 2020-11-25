@@ -10,14 +10,15 @@ object BuildInfo {
     const val copyright = "© 2020 Pepijn van den Broek. All rights reserved."
     const val vendor = "Pepijn van den Broek"
 
-    val mainClass = "$group.${name.toLowerCase()}.MainKt"
+    val mainClass = "$group.${name.toLowerCase()}.App"
 }
 
 object Versions {
     val jvmTarget = JavaVersion.VERSION_1_8.toString()
 
-    const val kotlin = "1.4.10"
-    const val compose = "0.2.0-build124"
+    const val kotlin = "1.4.20"
+    // https://maven.pkg.jetbrains.space/public/p/compose/dev/org/jetbrains/compose/desktop/desktop-jvm-all/
+    const val compose = "0.2.0-build129"
     const val logback = "1.2.3"
 }
 

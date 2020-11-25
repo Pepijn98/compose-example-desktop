@@ -18,8 +18,16 @@ repositories {
 }
 
 dependencies {
-    implementation(compose.desktop.all)
-    implementation(compose.materialIconsExtended)
+    // api(compose.runtime)
+    // api(compose.foundation)
+    // api(compose.material)
+    api(compose.desktop.common)
+    api(compose.desktop.currentOs)
+    // api(compose.desktop.linux_x64)
+    // api(compose.desktop.windows_x64)
+    // api(compose.desktop.macos_arm64)
+    // api(compose.desktop.macos_x64)
+    api(compose.materialIconsExtended)
 
     implementation(Deps.systemTray)
 
@@ -35,23 +43,23 @@ dependencies {
     testImplementation(kotlin("test-junit"))
 }
 
-val createProperties: Task by tasks.creating {
-    doLast {
-        File("$buildDir/resources/main/build-info.properties").bufferedWriter().use {
-            val p = Properties()
-            p.setProperty("name", BuildInfo.name)
-            p.setProperty("group", BuildInfo.group)
-            p.setProperty("version", BuildInfo.version)
-            p.setProperty("description", BuildInfo.description)
-            p.setProperty("copyright", BuildInfo.copyright)
-            p.setProperty("vendor", BuildInfo.vendor)
-            p.setProperty("mainClass", BuildInfo.mainClass)
-            p.store(it, null)
+tasks {
+    val createProperties: Task by creating {
+        doLast {
+            File("$buildDir/resources/main/build-info.properties").bufferedWriter().use {
+                val p = Properties()
+                p.setProperty("name", BuildInfo.name)
+                p.setProperty("group", BuildInfo.group)
+                p.setProperty("version", BuildInfo.version)
+                p.setProperty("description", BuildInfo.description)
+                p.setProperty("copyright", BuildInfo.copyright)
+                p.setProperty("vendor", BuildInfo.vendor)
+                p.setProperty("mainClass", BuildInfo.mainClass)
+                p.store(it, null)
+            }
         }
     }
-}
 
-tasks {
     compileKotlin {
         kotlinOptions.jvmTarget = Versions.jvmTarget
     }

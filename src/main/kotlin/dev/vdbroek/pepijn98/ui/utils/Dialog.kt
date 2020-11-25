@@ -36,7 +36,7 @@ class Dialog {
         menuBar: MenuBar? = null,
         undecorated: Boolean = false,
         events: WindowEvents = WindowEvents(),
-        onDismissEvent: (() -> Unit) = { close() },
+        onDismissRequest: (() -> Unit) = { close() },
     ) {
         val dialog = remember {
             AppWindow(
@@ -48,7 +48,7 @@ class Dialog {
                 menuBar = menuBar,
                 undecorated = undecorated,
                 events = events,
-                onDismissEvent = onDismissEvent
+                onDismissRequest = onDismissRequest
             )
         }
 
