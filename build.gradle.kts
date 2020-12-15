@@ -1,6 +1,7 @@
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import java.util.Properties
+import java.util.EnumSet
 
 plugins {
     kotlin("jvm") version Versions.kotlin
@@ -83,33 +84,35 @@ compose.desktop {
         javaHome = System.getenv("JDK_15") // Path to Amazon Corretto 15
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats = EnumSet.allOf(TargetFormat::class.java)
 
             packageName = BuildInfo.name
-            version = BuildInfo.version
             description = BuildInfo.description
             copyright = BuildInfo.copyright
             vendor = BuildInfo.vendor
+            version = BuildInfo.version
 
             val iconsRoot = project.file("./src/main/resources/images/icons")
             macOS {
                 iconFile.set(iconsRoot.resolve("icon.icns"))
+
+                packageIdentifier = "${BuildInfo.group}.${BuildInfo.name}"
             }
 
             linux {
                 iconFile.set(iconsRoot.resolve("icon.png"))
 
-                menuGroup = BuildInfo.name
-                shortcut = true
+                appRelease = BuildInfo.release
                 appCategory = "Utility"
                 debMaintainer = BuildInfo.vendor
+                menuGroup = BuildInfo.name
+                rpmLicenseType = License.Type.MIT
             }
 
             windows {
                 iconFile.set(iconsRoot.resolve("icon.ico"))
 
                 menuGroup = BuildInfo.name
-                shortcut = true
                 upgradeUuid = "d5d747e9-2ff0-4b46-b295-fb9390008309"
             }
         }

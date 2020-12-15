@@ -36,7 +36,6 @@ object App {
 
     @JvmStatic
     fun main(args: Array<String>) = Window(
-        // fun main() = Window(
         title = "Pepijn98",
         size = IntSize(700, 450),
         icon = getWindowIcon()

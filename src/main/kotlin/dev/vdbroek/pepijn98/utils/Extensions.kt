@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package dev.vdbroek.pepijn98.utils
 
 import dorkbox.systemTray.Menu
