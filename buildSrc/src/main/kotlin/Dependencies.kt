@@ -5,7 +5,7 @@ import org.gradle.api.JavaVersion
 object BuildInfo {
     const val name = "Pepijn98"
     const val group = "dev.vdbroek"
-    const val version = "1.0.15"
+    const val version = "1.0.16"
     const val release = "0"
     const val description = "Compose for Desktop Example App"
     const val copyright = License.BASIC
@@ -14,11 +14,11 @@ object BuildInfo {
     val mainClass = "$group.${name.toLowerCase()}.App"
 }
 object Versions {
-    val jvmTarget = JavaVersion.VERSION_1_8.toString()
+    val jvmTarget = JavaVersion.VERSION_11.toString()
 
-    const val kotlin = "1.4.21"
+    const val kotlin = "1.4.30"
     // https://maven.pkg.jetbrains.space/public/p/compose/dev/org/jetbrains/compose/desktop/
-    const val compose = "0.3.0-build135"
+    const val compose = "0.4.0-build168"
     const val logback = "1.2.3"
 }
 

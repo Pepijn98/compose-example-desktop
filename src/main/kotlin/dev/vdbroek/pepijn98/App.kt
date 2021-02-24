@@ -77,6 +77,7 @@ object App {
                     Icon(
                         modifier = Modifier.padding(10.dp),
                         imageVector = if (ThemeState.isDark) Icons.Rounded.Bedtime else Icons.Rounded.WbSunny,
+                        contentDescription = "Dark/light mode toggle button",
                         tint = MaterialTheme.colors.onBackground
                     )
                 }
@@ -114,13 +115,13 @@ object App {
             }
         }
 
-        onActive {
+        DisposableEffect(Unit) {
             val tray = SystemTray(appIcon)
-
             onDispose {
                 tray.shutdown()
             }
         }
+
     }
 
     private fun SystemTray(appIcon: BufferedImage): SystemTray {

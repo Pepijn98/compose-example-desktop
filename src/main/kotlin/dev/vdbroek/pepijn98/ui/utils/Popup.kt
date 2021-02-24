@@ -85,6 +85,7 @@ object Popup {
                     Icon(
                         modifier = Modifier.padding(horizontal = 10.dp),
                         imageVector = icon,
+                        contentDescription = "",
                         tint = onBackground
                     )
                     Text(
@@ -99,6 +100,7 @@ object Popup {
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.Close,
+                            contentDescription = "",
                             tint = onBackground
                         )
                     }

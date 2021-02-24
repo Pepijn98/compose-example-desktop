@@ -54,7 +54,7 @@ class Dialog {
 
         dialog.window.isResizable = false
 
-        onActive {
+        DisposableEffect(Unit) {
             dialog.show {
                 AppTheme {
                     Box(
@@ -67,7 +67,9 @@ class Dialog {
                                 modifier = Modifier.wrapContentSize().align(Alignment.Top).padding(end = 10.dp)
                             ) {
                                 Icon(
-                                    imageVector = icon.copy(defaultHeight = 80.dp, defaultWidth = 80.dp),
+                                    modifier = Modifier.size(80.dp),
+                                    imageVector = icon,
+                                    contentDescription = "",
                                     tint = iconTint
                                 )
                             }
@@ -102,11 +104,11 @@ class Dialog {
                     }
                 }
             }
-        }
 
-        onDispose {
-            if (!dialog.isClosed) {
-                dialog.close()
+            onDispose {
+                if (!dialog.isClosed) {
+                    dialog.close()
+                }
             }
         }
     }
