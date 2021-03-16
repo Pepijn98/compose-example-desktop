@@ -16,22 +16,14 @@ object BuildInfo {
 object Versions {
     val jvmTarget = JavaVersion.VERSION_11.toString()
 
-    const val kotlin = "1.4.30"
+    const val kotlin = "1.4.31"
     // https://maven.pkg.jetbrains.space/public/p/compose/dev/org/jetbrains/compose/desktop/
-    const val compose = "0.4.0-build168"
+    const val compose = "0.4.0-build173"
     const val logback = "1.2.3"
 }
 
 object Deps {
     const val systemTray = "com.dorkbox:SystemTray:3.17"
-
-    object Kotlin {
-        // TODO : Add deps
-    }
-
-    object Compose {
-        // TODO : Add deps
-    }
 
     object Logging {
         const val slf4j = "org.slf4j:slf4j-api:1.7.30"

@@ -24,11 +24,19 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun AppTheme(content: @Composable () -> Unit) {
-    DesktopMaterialTheme (
-        colors = if (ThemeState.isDark) DarkColorPalette else LightColorPalette,
-        typography = typography,
-        shapes = shapes,
-        content = content
-    )
-}
+fun AppTheme(content: @Composable () -> Unit) =
+    if (ThemeState.isDark) {
+        DesktopMaterialTheme(
+            colors = DarkColorPalette,
+            typography = typography,
+            shapes = shapes,
+            content = content
+        )
+    } else {
+        DesktopMaterialTheme(
+            colors = LightColorPalette,
+            typography = typography,
+            shapes = shapes,
+            content = content
+        )
+    }

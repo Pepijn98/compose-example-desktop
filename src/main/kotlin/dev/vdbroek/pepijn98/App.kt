@@ -29,10 +29,16 @@ import java.awt.image.BufferedImage
 import java.util.*
 import javax.imageio.ImageIO
 
-lateinit var dialog: Dialog
-lateinit var buildInfo: BuildInfo
-
 object App {
+
+    val dialog by lazy { Dialog() }
+    val buildInfo by lazy {
+        val resource = ClassLoader.getSystemResource("build-info.properties")
+        val properties = Properties()
+        properties.load(resource.openStream())
+
+        return@lazy BuildInfo.from(properties)
+    }
 
     @JvmStatic
     fun main(args: Array<String>) = Window(
@@ -42,13 +48,6 @@ object App {
     ) {
         var count by remember { mutableStateOf(0) }
         val appIcon = remember { getWindowIcon() }
-
-        val resource = ClassLoader.getSystemResource("build-info.properties")
-        val properties = Properties()
-        properties.load(resource.openStream())
-
-        buildInfo = BuildInfo.from(properties)
-        dialog = Dialog()
 
         AppTheme {
             Box(
@@ -121,7 +120,6 @@ object App {
                 tray.shutdown()
             }
         }
-
     }
 
     private fun SystemTray(appIcon: BufferedImage): SystemTray {

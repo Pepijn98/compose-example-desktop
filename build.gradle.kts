@@ -11,23 +11,23 @@ group = BuildInfo.group
 version = BuildInfo.version
 
 repositories {
-    jcenter()
     mavenCentral()
+    maven(url = "https://jcenter.bintray.com") // kotlinx-collection-immutable still uses jcenter which is required by compose
     maven(url = "https://jitpack.io")
     maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
 
 dependencies {
-    // api(compose.runtime)
-    // api(compose.foundation)
-    // api(compose.material)
-    api(compose.desktop.common)
-    api(compose.desktop.currentOs)
-    // api(compose.desktop.linux_x64)
-    // api(compose.desktop.windows_x64)
-    // api(compose.desktop.macos_arm64)
-    // api(compose.desktop.macos_x64)
-    api(compose.materialIconsExtended)
+    // implementation(compose.runtime)
+    // implementation(compose.foundation)
+    // implementation(compose.material)
+    implementation(compose.desktop.common)
+    implementation(compose.desktop.currentOs)
+    // implementation(compose.desktop.linux_x64)
+    // implementation(compose.desktop.windows_x64)
+    // implementation(compose.desktop.macos_arm64)
+    // implementation(compose.desktop.macos_x64)
+    implementation(compose.materialIconsExtended)
 
     implementation(Deps.systemTray)
 
@@ -37,8 +37,8 @@ dependencies {
 
     // Neither of these nor the build in compose notifier work on my linux environment
     // I don't know if it's because of compose or if they just don't support it or maybe I configured something badly
-    implementation("com.github.PlusHaze:TrayNotification:5393c3a54f")
-    implementation("org.controlsfx:controlsfx:11.0.3")
+    // implementation("com.github.PlusHaze:TrayNotification:5393c3a54f")
+    // implementation("org.controlsfx:controlsfx:11.0.3")
 
     testImplementation(kotlin("test-junit"))
 }
